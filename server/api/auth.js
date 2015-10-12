@@ -47,11 +47,10 @@ passport.use(new ClientPasswordStrategy(
  */
 passport.use(new BearerStrategy(
   function(accessToken, done) {
-    // console.log(accessToken);
     AccessToken.findOne({ token: accessToken }, function (err, accessToken) {
       if (err) { return done(err); }
       if (!accessToken) { return done(null, false); }
-      if (new Date() < accessToken.expirationDate){
+      if (new Date() < accessToken.expirationDate + 3600 * 8 ){
           // AccessToken.delete(accessToken, function (err) {
           //   return done(err);
           // });
@@ -59,22 +58,16 @@ passport.use(new BearerStrategy(
       }else{
         if (accessToken.userId != null) {
             User.findOne({ id:accessToken.userId }, function (err, user) {
-              console.log(user+'1');
               if (err) {
                 return done(err);
               }
               if (!user) {
                 return done(null, false);
               }
-              // to keep this example simple, restricted scopes are not implemented,
-              // and this is just for illustrative purposes
               var info = { scope: '*' };
               return done(null, user, info);
             });
           } else {
-            //The request came from a client only since userID is null
-            //therefore the client is passed back instead of a user
-            console.log(accessToken.clientId);
             Client.findById(accessToken.clientId, function (err, client) {
               console.log(client);
               if (err) {
@@ -98,11 +91,10 @@ exports.basic = passport.authenticate('basic', { session : false ,failureFlash: 
 exports.oauth2ClientPassword = passport.authenticate('oauth2-client-password', {session: false, failureFlash: true});
 exports.bearer = function(req, res, next){
     passport.authenticate('bearer', {session: false}, function(err, user, info) {
-        console.log(user,info);
         if (err) { return next(err); }
 
-        //authentication error
-        // if (!user) { return res.json({error: info.error_description || 'Invalid Token'}) }
+        // authentication error
+        if (!user) { return res.json({error: info.error_description || 'Invalid Token'}) }
 
         //success
         // req.logIn(user, function(err) {

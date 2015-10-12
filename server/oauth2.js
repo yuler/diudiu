@@ -180,6 +180,20 @@ server.exchange(oauth2orize.exchange.refreshToken(function (client, refreshToken
   });
 }));
 
+
+// server.serializeClient(function (client, done) {
+//   return done(null, client.id);
+// });
+//
+// server.deserializeClient(function (id, done) {
+//   db.clients.find(id, function (err, client) {
+//     if (err) {
+//       return done(err);
+//     }
+//     return done(null, client);
+//   });
+// });
+
 // app.get('/dialog/authorize',
 //   login.ensureLoggedIn(),
 //   server.authorize(function(clientID, redirectURI, done) {
