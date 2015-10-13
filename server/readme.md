@@ -29,4 +29,14 @@ Action: Post
        }
 
 第三种: grant_type refresh_token
-      
+      client_id android
+      client_secret kylin
+      refresh_token oLHeSflSdV1bB4Fa111
+
+      正确返回结果如下:
+      {
+        "access_token": "FKBHJDLOQE5kZlIG",
+        "refresh_token": "oLHeSflSdV1bB4Fa",
+        "expires_in": 7200,
+        "token_type": "Bearer"
+      }
